@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>港区 保育園ランキング｜白金台・高輪エリア</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Helvetica Neue',Arial,'Hiragino Sans',sans-serif;background:#0f1117;color:#e0e0e0}
+header{background:linear-gradient(135deg,#1a1d2e,#16213e);padding:14px 18px;border-bottom:1px solid #2a2d3e;display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap}
+header h1{font-size:1.1rem;font-weight:700;color:#fff}
+header p{font-size:0.71rem;color:#8b9bb4;margin-top:2px}
+.badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.badge{background:#1e2d5c;border:1px solid #3b4fd8;color:#7eb3ff;font-size:0.62rem;padding:2px 7px;border-radius:10px;white-space:nowrap}
+.badge.g{background:#1e3a2d;border-color:#22c55e;color:#4ade80}
+.badge.y{background:#2d2a1e;border-color:#d97706;color:#fbbf24}
+
+.layout{display:flex;height:calc(100vh - 78px)}
+#map{flex:0 0 44%;height:100%}
+.panel{flex:1;overflow-y:auto;overflow-x:auto;padding:10px;background:#0f1117}
+
+.controls{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap;align-items:center}
+.controls input{flex:1;min-width:130px;background:#1c1f2e;border:1px solid #2e3148;color:#e0e0e0;padding:5px 9px;border-radius:6px;font-size:0.78rem}
+.btn{background:#1c1f2e;border:1px solid #2e3148;color:#aab;padding:5px 10px;border-radius:6px;font-size:0.7rem;cursor:pointer;transition:all .15s}
+.btn.active{background:#3b4fd8;border-color:#3b4fd8;color:#fff}
+
+table{width:100%;border-collapse:collapse;font-size:0.72rem}
+thead th{position:sticky;top:0;z-index:10;background:#1a1d2e;color:#7b8fa8;font-weight:600;padding:6px 3px;text-align:center;border-bottom:1px solid #2a2d3e;white-space:nowrap;font-size:0.66rem}
+thead th.L{text-align:left}
+tbody tr{border-bottom:1px solid #181b27;cursor:pointer;transition:background .12s}
+tbody tr:hover{background:#1c1f2e}
+tbody tr.sel{background:#1f2440;outline:1px solid #3b4fd8}
+tbody td{padding:5px 3px;text-align:center;vertical-align:middle}
+tbody td.L{text-align:left}
+
+.rk{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;font-weight:700;font-size:0.7rem}
+.rk1{background:#f5c842;color:#000}.rk2{background:#b8b8b8;color:#000}.rk3{background:#cd7f32;color:#000}.rkn{background:#252838;color:#9aa}
+.tot{font-weight:700;color:#7dd3fc;font-size:0.9rem}
+.name-s{font-weight:600;color:#dde;font-size:0.7rem;line-height:1.3}
+.sub{font-size:0.6rem;color:#667}
+.vc{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;font-weight:700;font-size:0.62rem}
+.vy{background:#22c55e;color:#000}.vn{background:#ef4444;color:#fff}.vf{background:#f97316;color:#000}.vu{background:#555;color:#ccc;font-size:0.52rem}
+.slope-bar{display:flex;gap:1px;justify-content:center;align-items:center;font-size:0.63rem;white-space:nowrap}
+.sb-go{color:#f97316}.sb-back{color:#60a5fa}
+.sc-cell{font-size:0.7rem;font-weight:600}
+.s100{color:#4ade80}.s75{color:#86efac}.s60{color:#bef264}.s50{color:#fde68a}
+.s35{color:#fbbf24}.s25{color:#fb923c}.s15{color:#f87171}.s0{color:#555}
+
+/* Info panel */
+#ip{position:absolute;bottom:14px;left:6px;z-index:200;background:#1a1d2e;border:1px solid #2e3148;border-radius:10px;padding:12px 14px;width:290px;display:none;box-shadow:0 4px 20px rgba(0,0,0,.6)}
+#ip h3{font-size:0.82rem;color:#fff;margin-bottom:8px;line-height:1.3}
+.ir{display:flex;justify-content:space-between;margin:3px 0;font-size:0.7rem;gap:6px}
+.il{color:#8b9bb4;flex-shrink:0}.iv{color:#e0e0e0;font-weight:600;text-align:right;word-break:break-all}
+.score-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin:7px 0 4px}
+.score-grid2{display:grid;grid-template-columns:repeat(4,1fr);gap:3px;margin:0 0 6px}
+.sc{background:#252838;border-radius:5px;padding:3px 4px;font-size:0.62rem;text-align:center}
+.sc span{display:block;color:#8b9bb4;font-size:0.56rem;margin-bottom:1px}
+.sc b{font-size:0.75rem}
+#ip-close{position:absolute;top:6px;right:8px;cursor:pointer;color:#555;font-size:0.9rem}
+.ip-tag{display:inline-block;font-size:0.58rem;padding:1px 5px;border-radius:8px;margin:1px}
+.tag-b{background:#1e2d5c;border:1px solid #3b4fd8;color:#7eb3ff}
+.tag-g{background:#1e3a2d;border:1px solid #22c55e;color:#4ade80}
+.tag-r{background:#2d1e1e;border:1px solid #ef4444;color:#fca5a5}
+.tag-y{background:#2d2a1e;border:1px solid #d97706;color:#fbbf24}
+.tag-o{background:#2d2218;border:1px solid #ea580c;color:#fb923c}
+
+.legend{position:absolute;top:8px;left:6px;z-index:200;background:rgba(20,22,38,.88);border-radius:8px;padding:7px 10px;font-size:0.63rem;color:#aaa}
+.li{display:flex;align-items:center;gap:5px;margin:2px 0}
+.ld{width:10px;height:10px;border-radius:50%}
+.weight-note{font-size:0.63rem;color:#445;text-align:right;padding:1px 3px 5px;line-height:1.5}
+
+.panel::-webkit-scrollbar{width:4px}
+.panel::-webkit-scrollbar-track{background:#0f1117}
+.panel::-webkit-scrollbar-thumb{background:#252838;border-radius:2px}
+
+@media(max-width:680px){.layout{flex-direction:column;height:auto}#map{flex:none;height:300px}}
+</style>
+</head>
+<body>
+<header>
+  <div style="flex:1">
+    <h1>🏫 港区 認可保育園ランキング｜白金台・高輪エリア 25園</h1>
+    <p>自宅: 白金台AKETA（白金台3-18-12）｜双子 1歳7ヶ月 ／ 9軸評価 更新: 2026-05</p>
+    <div class="badges">
+      <span class="badge">🚲 自転車 18%</span>
+      <span class="badge">⛰ 坂道 15%</span>
+      <span class="badge">👨 夫通勤 14%</span>
+      <span class="badge">👩 妻通勤 18%</span>
+      <span class="badge">🌙 延長 10%</span>
+      <span class="badge y">📋 申請成功率 12%</span>
+      <span class="badge y">🏢 法人安定 7%</span>
+      <span class="badge g">🌳 園庭 4%</span>
+      <span class="badge g">⭐ 第三者評価 2%</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <div style="position:relative;flex:0 0 44%">
+    <div id="map"></div>
+    <div class="legend">
+      <div class="li"><div class="ld" style="background:#f5c842"></div>1〜3位</div>
+      <div class="li"><div class="ld" style="background:#7dd3fc"></div>4〜10位</div>
+      <div class="li"><div class="ld" style="background:#94a3b8"></div>11位〜</div>
+      <div class="li"><div class="ld" style="background:#22c55e"></div>1歳：空きあり</div>
+      <div class="li"><div class="ld" style="background:#f97316"></div>1歳：残りわずか</div>
+      <div class="li"><div class="ld" style="background:#ef4444"></div>1歳：空きなし</div>
+      <div class="li"><div class="ld" style="background:#ff6b6b"></div>自宅</div>
+    </div>
+    <div id="ip">
+      <span id="ip-close" onclick="closeIP()">✕</span>
+      <h3 id="ip-name"></h3>
+      <div id="ip-tags" style="margin-bottom:6px"></div>
+      <div class="score-grid" id="ip-scores1"></div>
+      <div class="score-grid2" id="ip-scores2"></div>
+      <div class="ir"><span class="il">住所</span><span class="iv" id="ip-addr" style="font-size:.63rem;max-width:185px"></span></div>
+      <div class="ir"><span class="il">自転車</span><span class="iv" id="ip-bike"></span></div>
+      <div class="ir"><span class="il">坂道（往路↑/復路↑）</span><span class="iv" id="ip-slope" style="font-size:.64rem"></span></div>
+      <div class="ir"><span class="il">夫（自宅→園→目黒）</span><span class="iv" id="ip-husb"></span></div>
+      <div class="ir"><span class="il">妻通勤</span><span class="iv" id="ip-wife" style="font-size:.63rem"></span></div>
+      <div class="ir"><span class="il">標準保育</span><span class="iv" id="ip-std"></span></div>
+      <div class="ir"><span class="il">延長保育</span><span class="iv" id="ip-ext"></span></div>
+      <div class="ir"><span class="il">1歳定員</span><span class="iv" id="ip-cap"></span></div>
+      <div class="ir"><span class="il">1歳空き</span><span class="iv" id="ip-vac"></span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="controls">
+      <input type="text" id="search" placeholder="🔍 園名・住所・法人で絞り込み" oninput="filter()">
+      <button class="btn" id="bv" onclick="toggleV()">1歳空きあり</button>
+      <button class="btn" id="be" onclick="toggleE()">英語あり</button>
+    </div>
+    <div class="weight-note">
+      スコア配分: 🚲18% + ⛰15% + 👨14% + 👩18% + 🌙10% + 📋A=12% + 🏢B=7% + 🌳D=4% + ⭐E=2%
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:26px">順</th>
+          <th class="L" style="min-width:95px">保育園名</th>
+          <th>総合</th>
+          <th>🚲<br><span style="font-weight:400;color:#445">分</span></th>
+          <th>⛰坂<br><span style="font-weight:400;color:#445">往/復↑m</span></th>
+          <th>👨夫<br><span style="font-weight:400;color:#445">分</span></th>
+          <th>👩妻<br><span style="font-weight:400;color:#445">分</span></th>
+          <th>🌙延長</th>
+          <th>📋A<br><span style="font-weight:400;color:#445">申請</span></th>
+          <th>🏢B<br><span style="font-weight:400;color:#445">法人</span></th>
+          <th>🌳D<br><span style="font-weight:400;color:#445">園庭</span></th>
+          <th>⭐E<br><span style="font-weight:400;color:#445">評価</span></th>
+          <th>1歳<br>空き</th>
+        </tr>
+      </thead>
+      <tbody id="tb"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const D=[
+{"rank":1,"name":"アイグラン保育園白金台","address":"東京都港区白金台3-13-18","lat":35.63577,"lng":139.725008,"category":"認可","operator_type":"大手株式会社","cap_1_aged":12,"bike_min":3.4,"uphill_go":20.5,"uphill_back":2.7,"total_climb":23.2,"husb_total_min":17.0,"wife_best_min":5.8,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"4","vacancy_status":"✅ 空きあり","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":100,"slope":75,"husband":75.7,"wife":80.7,"extended":100,"A":100,"B":70,"D":0,"E":100,"total":83.3}},
+{"rank":2,"name":"愛星保育園","address":"東京都港区高輪1-27-40","lat":35.63676,"lng":139.731967,"category":"認可","operator_type":"社会福祉法人","cap_1_aged":12,"bike_min":7.8,"uphill_go":28.6,"uphill_back":26.5,"total_climb":55.1,"husb_total_min":25.4,"wife_best_min":7.4,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：00～18：00","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"独立園庭","third_party_eval":"確認済み","scores":{"bike":50,"slope":35,"husband":63.7,"wife":75.3,"extended":100,"A":100,"B":100,"D":100,"E":100,"total":71.7}},
+{"rank":3,"name":"高輪夢保育園","address":"東京都港区高輪3-4-3","lat":35.634937,"lng":139.731716,"category":"認可","operator_type":"社会福祉法人","cap_1_aged":8,"bike_min":8.8,"uphill_go":31.0,"uphill_back":28.5,"total_climb":59.5,"husb_total_min":27.2,"wife_best_min":6.9,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"共用/屋上","third_party_eval":"確認済み","scores":{"bike":50,"slope":35,"husband":61.1,"wife":77.0,"extended":100,"A":80,"B":100,"D":60,"E":100,"total":67.7}},
+{"rank":4,"name":"神応保育園","address":"東京都港区白金6-9-5","lat":35.643653,"lng":139.724577,"category":"認可","operator_type":"区立指定管理","cap_1_aged":15,"bike_min":9.1,"uphill_go":24.7,"uphill_back":29.1,"total_climb":53.8,"husb_total_min":23.3,"wife_best_min":13.3,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：15～18：15","extended_until":"22：00まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"独立園庭","third_party_eval":"確認済み","scores":{"bike":50,"slope":35,"husband":66.7,"wife":55.7,"extended":100,"A":100,"B":80,"D":100,"E":100,"total":67.2}},
+{"rank":5,"name":"高輪さつき保育園","address":"東京都港区高輪1-16-15","lat":35.640918,"lng":139.733455,"category":"認可","operator_type":"大手株式会社","cap_1_aged":10,"bike_min":6.8,"uphill_go":19.1,"uphill_back":30.7,"total_climb":49.8,"husb_total_min":25.7,"wife_best_min":13.1,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":75,"slope":35,"husband":63.3,"wife":56.3,"extended":100,"A":100,"B":70,"D":0,"E":100,"total":66.6}},
+{"rank":6,"name":"さくらさくみらい高輪","address":"東京都港区高輪2-6-21","lat":35.638,"lng":139.7343,"category":"認可","operator_type":"大手株式会社","cap_1_aged":12,"bike_min":9.2,"uphill_go":33.9,"uphill_back":25.8,"total_climb":59.7,"husb_total_min":27.3,"wife_best_min":4.4,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"推定あり","scores":{"bike":50,"slope":35,"husband":61.0,"wife":85.3,"extended":100,"A":100,"B":65,"D":0,"E":60,"total":65.9}},
+{"rank":7,"name":"えほんのもり白金台保育園","address":"東京都港区白金台2-11-3","lat":35.633188,"lng":139.730713,"category":"認可","operator_type":"大手株式会社","cap_1_aged":5,"bike_min":6.0,"uphill_go":32.5,"uphill_back":22.8,"total_climb":55.3,"husb_total_min":23.7,"wife_best_min":6.6,"wife_best_station":"高輪台駅（浅草線→宝町直通）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"推定あり","scores":{"bike":75,"slope":35,"husband":66.1,"wife":78.0,"extended":100,"A":60,"B":70,"D":0,"E":60,"total":65.3}},
+{"rank":8,"name":"ニチイキッズ白金台保育園","address":"東京都港区白金台2-26-10","lat":35.631759,"lng":139.729917,"category":"認可","operator_type":"大手株式会社","cap_1_aged":12,"bike_min":8.0,"uphill_go":38.7,"uphill_back":23.0,"total_climb":61.7,"husb_total_min":25.9,"wife_best_min":6.5,"wife_best_station":"高輪台駅（浅草線→宝町直通）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"2","vacancy_status":"⚠️  残りわずか","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":50,"slope":15,"husband":63.0,"wife":78.3,"extended":100,"A":100,"B":70,"D":0,"E":100,"total":63.1}},
+{"rank":9,"name":"みつばち保育園","address":"東京都港区白金4-7-2","lat":35.642807,"lng":139.727554,"category":"認可","operator_type":"社会福祉法人","cap_1_aged":11,"bike_min":7.5,"uphill_go":21.5,"uphill_back":36.9,"total_climb":58.4,"husb_total_min":22.3,"wife_best_min":15.5,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：15～18：15","extended_until":"19：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"共用/屋上","third_party_eval":"確認済み","scores":{"bike":50,"slope":35,"husband":68.1,"wife":48.3,"extended":60,"A":100,"B":100,"D":60,"E":100,"total":61.9}},
+{"rank":10,"name":"白金保育園","address":"東京都港区白金3-10-12","lat":35.6419,"lng":139.7231,"category":"認可","operator_type":"区立直営","cap_1_aged":15,"bike_min":10.0,"uphill_go":20.1,"uphill_back":40.5,"total_climb":60.6,"husb_total_min":26.1,"wife_best_min":17.9,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"独立園庭","third_party_eval":"確認済み","scores":{"bike":50,"slope":15,"husband":62.7,"wife":40.3,"extended":100,"A":100,"B":90,"D":100,"E":100,"total":61.6}},
+{"rank":11,"name":"高輪保育園","address":"東京都港区高輪3-18-15","lat":35.633207,"lng":139.735724,"category":"認可","operator_type":"区立直営","cap_1_aged":22,"bike_min":12.5,"uphill_go":48.8,"uphill_back":44.1,"total_climb":92.9,"husb_total_min":34.7,"wife_best_min":6.4,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"独立園庭","third_party_eval":"確認済み","scores":{"bike":25,"slope":0,"husband":50.4,"wife":78.7,"extended":100,"A":100,"B":90,"D":100,"E":100,"total":60.0}},
+{"rank":12,"name":"伊皿子坂保育園","address":"東京都港区三田4-19-30","lat":35.640411,"lng":139.738726,"category":"認可","operator_type":"区立直営","cap_1_aged":22,"bike_min":12.1,"uphill_go":29.7,"uphill_back":38.6,"total_climb":68.3,"husb_total_min":32.7,"wife_best_min":13.9,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"独立園庭","third_party_eval":"確認済み","scores":{"bike":25,"slope":15,"husband":53.3,"wife":53.7,"extended":100,"A":100,"B":90,"D":100,"E":100,"total":58.2}},
+{"rank":13,"name":"桂坂保育室","address":"東京都港区高輪3-19-36","lat":35.633431,"lng":139.737205,"category":"保育室","operator_type":"小規模","cap_1_aged":14,"bike_min":10.7,"uphill_go":30.1,"uphill_back":39.1,"total_climb":69.2,"husb_total_min":31.9,"wife_best_min":3.6,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"4","vacancy_status":"✅ 空きあり","english":false,"garden":"なし","third_party_eval":"推定あり","scores":{"bike":25,"slope":15,"husband":54.4,"wife":88.0,"extended":100,"A":100,"B":50,"D":0,"E":60,"total":56.9}},
+{"rank":14,"name":"ミアヘルサ保育園ゆらりん白金","address":"東京都港区白金1-26-10","lat":35.643907,"lng":139.733517,"category":"認可","operator_type":"大手株式会社","cap_1_aged":8,"bike_min":8.1,"uphill_go":13.5,"uphill_back":42.5,"total_climb":56.0,"husb_total_min":24.7,"wife_best_min":19.8,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":50,"slope":35,"husband":64.7,"wife":34.0,"extended":100,"A":80,"B":70,"D":0,"E":100,"total":55.9}},
+{"rank":15,"name":"志田町保育室","address":"東京都港区白金1-11-16","lat":35.645795,"lng":139.73367,"category":"保育室","operator_type":"小規模","cap_1_aged":15,"bike_min":8.6,"uphill_go":18.7,"uphill_back":40.4,"total_climb":59.1,"husb_total_min":25.7,"wife_best_min":22.0,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"推定あり","scores":{"bike":50,"slope":35,"husband":63.3,"wife":26.7,"extended":100,"A":100,"B":50,"D":0,"E":60,"total":54.6}},
+{"rank":16,"name":"ほっぺるランド高輪二丁目","address":"東京都港区高輪2-16-8","lat":35.640175,"lng":139.739791,"category":"認可","operator_type":"大手株式会社","cap_1_aged":10,"bike_min":12.7,"uphill_go":27.6,"uphill_back":44.5,"total_climb":72.1,"husb_total_min":35.3,"wife_best_min":10.3,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：30～18：30","extended_until":"20：30まで","vacancy_1aged":"5","vacancy_status":"✅ 空きあり","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":25,"slope":15,"husband":49.6,"wife":65.7,"extended":100,"A":100,"B":70,"D":0,"E":100,"total":54.4}},
+{"rank":17,"name":"ミアヘルサ保育園ゆらりん高輪","address":"東京都港区高輪1-5-38","lat":35.641758,"lng":139.736717,"category":"認可","operator_type":"大手株式会社","cap_1_aged":15,"bike_min":11.8,"uphill_go":36.8,"uphill_back":32.4,"total_climb":69.2,"husb_total_min":31.0,"wife_best_min":14.4,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":25,"slope":15,"husband":55.7,"wife":52.0,"extended":100,"A":100,"B":70,"D":0,"E":100,"total":52.8}},
+{"rank":18,"name":"スターチャイルド白金高輪ナーサリー","address":"東京都港区白金1-2-1","lat":35.646175,"lng":139.73523,"category":"認可","operator_type":"大手株式会社","cap_1_aged":8,"bike_min":9.8,"uphill_go":16.2,"uphill_back":39.6,"total_climb":55.8,"husb_total_min":26.7,"wife_best_min":25.1,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":50,"slope":35,"husband":61.9,"wife":16.3,"extended":100,"A":80,"B":70,"D":0,"E":100,"total":52.4}},
+{"rank":19,"name":"みなと保育園","address":"東京都港区高輪1-6-9","lat":35.6433,"lng":139.7332,"category":"認可","operator_type":"社会福祉法人","cap_1_aged":9,"bike_min":12.1,"uphill_go":37.4,"uphill_back":27.3,"total_climb":64.7,"husb_total_min":31.2,"wife_best_min":15.9,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：30～18：30","extended_until":"19：30まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"共用/屋上","third_party_eval":"確認済み","scores":{"bike":25,"slope":15,"husband":55.4,"wife":47.0,"extended":80,"A":80,"B":100,"D":60,"E":100,"total":52.0}},
+{"rank":20,"name":"うれしい保育園白金高輪","address":"東京都港区三田5-17-2","lat":35.645176,"lng":139.736961,"category":"認可","operator_type":"大手株式会社","cap_1_aged":10,"bike_min":8.8,"uphill_go":16.9,"uphill_back":38.4,"total_climb":55.3,"husb_total_min":28.2,"wife_best_min":22.8,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"19：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":50,"slope":35,"husband":59.7,"wife":24.0,"extended":60,"A":100,"B":70,"D":0,"E":100,"total":51.8}},
+{"rank":21,"name":"ポピンズナーサリースクールうみ高輪ゲートウェイ駅前","address":"東京都港区高輪2-22-1","lat":35.6293,"lng":139.7365,"category":"認可","operator_type":"大手株式会社","cap_1_aged":10,"bike_min":13.0,"uphill_go":31.1,"uphill_back":46.1,"total_climb":77.2,"husb_total_min":36.3,"wife_best_min":11.4,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"1","vacancy_status":"⚠️  残りわずか","english":true,"garden":"なし","third_party_eval":"未受審/新設","scores":{"bike":25,"slope":15,"husband":48.1,"wife":62.0,"extended":100,"A":100,"B":70,"D":0,"E":0,"total":51.5}},
+{"rank":22,"name":"白金三丁目保育室","address":"東京都港区白金3-7-13","lat":35.64577,"lng":139.730247,"category":"保育室","operator_type":"小規模","cap_1_aged":5,"bike_min":10.0,"uphill_go":18.1,"uphill_back":40.1,"total_climb":58.2,"husb_total_min":25.4,"wife_best_min":19.4,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"推定あり","scores":{"bike":50,"slope":35,"husband":63.7,"wife":35.3,"extended":100,"A":60,"B":50,"D":0,"E":60,"total":51.4}},
+{"rank":23,"name":"ポピンズナーサリースクールそら高輪ゲートウェイ駅前","address":"東京都港区高輪2-21-1","lat":35.6295,"lng":139.7362,"category":"認可","operator_type":"大手株式会社","cap_1_aged":10,"bike_min":13.5,"uphill_go":31.6,"uphill_back":49.5,"total_climb":81.1,"husb_total_min":37.4,"wife_best_min":9.9,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"1","vacancy_status":"⚠️  残りわずか","english":true,"garden":"なし","third_party_eval":"未受審/新設","scores":{"bike":25,"slope":0,"husband":46.6,"wife":67.0,"extended":100,"A":100,"B":70,"D":0,"E":30,"total":50.6}},
+{"rank":24,"name":"太陽の子三田五丁目保育園","address":"東京都港区三田5-4-3","lat":35.647706,"lng":139.738902,"category":"認可","operator_type":"大手株式会社","cap_1_aged":8,"bike_min":10.4,"uphill_go":16.2,"uphill_back":40.9,"total_climb":57.1,"husb_total_min":30.2,"wife_best_min":28.2,"wife_best_station":"白金高輪駅（三田線→京橋）","standard_time":"7：15～18：15","extended_until":"20：15まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":25,"slope":35,"husband":56.9,"wife":6.0,"extended":100,"A":80,"B":70,"D":0,"E":100,"total":45.3}},
+{"rank":25,"name":"ミアヘルサ保育園ひびき白金高輪","address":"東京都港区白金3-2-3","lat":35.646602,"lng":139.731252,"category":"認可","operator_type":"大手株式会社","cap_1_aged":5,"bike_min":10.6,"uphill_go":23.0,"uphill_back":41.2,"total_climb":64.2,"husb_total_min":26.2,"wife_best_min":21.1,"wife_best_station":"白金台駅（三田線→日比谷）","standard_time":"7：30～18：30","extended_until":"20：30まで","vacancy_1aged":"0","vacancy_status":"❌ 空きなし","english":false,"garden":"なし","third_party_eval":"確認済み","scores":{"bike":25,"slope":15,"husband":62.6,"wife":29.7,"extended":100,"A":60,"B":70,"D":0,"E":100,"total":45.0}}
+];
+
+const HOME={lat:35.6366,lng:139.7237};
+let map,markers={},selRow=null,showV=false,showE=false;
+
+function markerRankColor(n){
+  if(n.rank<=3) return '#f5c842';
+  if(n.rank<=10) return '#7dd3fc';
+  return '#94a3b8';
+}
+function markerVacColor(n){
+  if(n.vacancy_status.includes('空きあり')) return '#22c55e';
+  if(n.vacancy_status.includes('残りわずか')) return '#f97316';
+  return '#ef4444';
+}
+function rkBadge(r){
+  const cls=r===1?'rk1':r===2?'rk2':r===3?'rk3':'rkn';
+  return `<span class="rk ${cls}">${r}</span>`;
+}
+function vcHTML(st,raw){
+  if(st.includes('空きあり')) return `<span class="vc vy" title="${raw}名">${raw}</span>`;
+  if(st.includes('残りわずか')) return `<span class="vc vf" title="${raw}名">${raw}</span>`;
+  return `<span class="vc vn">×</span>`;
+}
+function scColor(v){
+  if(v>=90) return 's100';
+  if(v>=70) return 's75';
+  if(v>=55) return 's60';
+  if(v>=40) return 's50';
+  if(v>=28) return 's35';
+  if(v>=18) return 's25';
+  if(v>0)   return 's15';
+  return 's0';
+}
+function gardenIcon(g){
+  if(g==='独立園庭') return '🌳';
+  if(g==='共用/屋上') return '🏙';
+  return '—';
+}
+function evalIcon(e){
+  if(e==='確認済み') return '⭐';
+  if(e==='推定あり') return '△';
+  if(e==='未受審/新設') return '✕';
+  return '—';
+}
+
+function initMap(){
+  map=new google.maps.Map(document.getElementById('map'),{
+    center:HOME,zoom:14,mapTypeId:'roadmap',
+    styles:[
+      {elementType:'geometry',stylers:[{color:'#1e2030'}]},
+      {elementType:'labels.text.fill',stylers:[{color:'#8892a4'}]},
+      {elementType:'labels.text.stroke',stylers:[{color:'#1e2030'}]},
+      {featureType:'road',elementType:'geometry',stylers:[{color:'#2e3452'}]},
+      {featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#38415a'}]},
+      {featureType:'water',elementType:'geometry',stylers:[{color:'#0e1726'}]},
+      {featureType:'poi',elementType:'geometry',stylers:[{color:'#252838'}]},
+      {featureType:'transit',elementType:'geometry',stylers:[{color:'#2a3048'}]},
+      {featureType:'landscape',elementType:'geometry',stylers:[{color:'#1a1d2e'}]},
+    ]
+  });
+  new google.maps.Marker({
+    position:HOME,map,title:'自宅（白金台AKETA）',
+    icon:{path:google.maps.SymbolPath.CIRCLE,scale:9,fillColor:'#ff6b6b',fillOpacity:1,strokeColor:'#fff',strokeWeight:2}
+  });
+  D.forEach(n=>{
+    const m=new google.maps.Marker({
+      position:{lat:n.lat,lng:n.lng},map,
+      label:{text:String(n.rank),color:'#000',fontSize:'9px',fontWeight:'bold'},
+      icon:{path:google.maps.SymbolPath.CIRCLE,scale:13,fillColor:markerRankColor(n),fillOpacity:.9,strokeColor:markerVacColor(n),strokeWeight:2.5}
+    });
+    m.addListener('click',()=>showIP(n));
+    markers[n.name]=m;
+  });
+  render(D);
+}
+
+function opTag(op){
+  if(op==='社会福祉法人') return `<span class="ip-tag tag-g">社福</span>`;
+  if(op==='区立直営') return `<span class="ip-tag tag-b">区立</span>`;
+  if(op==='区立指定管理') return `<span class="ip-tag tag-b">区立(管理)</span>`;
+  if(op==='大手株式会社') return `<span class="ip-tag tag-y">大手</span>`;
+  if(op==='小規模') return `<span class="ip-tag tag-o">小規模</span>`;
+  return `<span class="ip-tag tag-r">${op}</span>`;
+}
+function catTag(c){
+  if(c==='保育室') return `<span class="ip-tag tag-o">保育室</span>`;
+  return `<span class="ip-tag tag-b">認可</span>`;
+}
+
+function showIP(n){
+  const s=n.scores;
+  document.getElementById('ip-name').textContent=`#${n.rank} ${n.name}`;
+  document.getElementById('ip-tags').innerHTML=
+    catTag(n.category)+opTag(n.operator_type)+
+    (n.english?'<span class="ip-tag tag-y">🌏英語</span>':'')+
+    (n.garden!=='なし'?`<span class="ip-tag tag-g">${gardenIcon(n.garden)}${n.garden}</span>`:'');
+  document.getElementById('ip-scores1').innerHTML=
+    `<div class="sc"><span>🚲自転車</span><b class="${scColor(s.bike)}">${s.bike}</b></div>`+
+    `<div class="sc"><span>⛰坂道</span><b class="${scColor(s.slope)}">${s.slope}</b></div>`+
+    `<div class="sc"><span>👨夫</span><b class="${scColor(s.husband)}">${s.husband}</b></div>`+
+    `<div class="sc"><span>👩妻</span><b class="${scColor(s.wife)}">${s.wife}</b></div>`+
+    `<div class="sc" style="border:1px solid #3b4fd8"><span>総合</span><b style="color:#7dd3fc;font-size:.85rem">${s.total}</b></div>`;
+  document.getElementById('ip-scores2').innerHTML=
+    `<div class="sc"><span>🌙延長</span><b class="${scColor(s.extended)}">${s.extended}</b></div>`+
+    `<div class="sc"><span>📋A申請</span><b class="${scColor(s.A)}">${s.A}</b></div>`+
+    `<div class="sc"><span>🏢B法人</span><b class="${scColor(s.B)}">${s.B}</b></div>`+
+    `<div class="sc"><span>🌳D / ⭐E</span><b class="${scColor(s.D)}">${s.D}</b><span style="color:#445"> / </span><b class="${scColor(s.E)}">${s.E}</b></div>`;
+  document.getElementById('ip-addr').textContent=n.address.replace('東京都港区','港区');
+  document.getElementById('ip-bike').textContent=`${n.bike_min}分`;
+  document.getElementById('ip-slope').textContent=`往路↑${n.uphill_go.toFixed(1)}m / 復路↑${n.uphill_back.toFixed(1)}m（計${n.total_climb.toFixed(1)}m）`;
+  document.getElementById('ip-husb').textContent=`${n.husb_total_min}分`;
+  document.getElementById('ip-wife').textContent=`${n.wife_best_min}分（${n.wife_best_station}）`;
+  document.getElementById('ip-std').textContent=n.standard_time||'—';
+  document.getElementById('ip-ext').textContent=n.extended_until||'—';
+  document.getElementById('ip-cap').textContent=`${n.cap_1_aged}名`;
+  document.getElementById('ip-vac').textContent=`${n.vacancy_status}（${n.vacancy_1aged}名）`;
+  document.getElementById('ip').style.display='block';
+  map.panTo({lat:n.lat,lng:n.lng});
+}
+function closeIP(){document.getElementById('ip').style.display='none';}
+
+function render(list){
+  const tb=document.getElementById('tb');
+  tb.innerHTML='';
+  list.forEach(n=>{
+    const s=n.scores;
+    const tr=document.createElement('tr');
+    const extShort=(n.extended_until||'').replace('まで','').replace('：',':');
+    tr.innerHTML=
+      `<td>${rkBadge(n.rank)}</td>`+
+      `<td class="L"><span class="name-s">${n.name}</span>`+
+        (n.english?'<span style="font-size:.57rem;color:#fbbf24"> 🌏英</span>':'')+
+        (n.category==='保育室'?'<span style="font-size:.57rem;color:#fb923c"> 室</span>':'')+
+        `<br><span class="sub">${n.operator_type}</span></td>`+
+      `<td><span class="tot">${s.total}</span></td>`+
+      `<td class="${scColor(s.bike)}" style="font-weight:600">${n.bike_min}</td>`+
+      `<td><div class="slope-bar"><span class="sb-go">↑${n.uphill_go.toFixed(0)}</span><span style="color:#333">/</span><span class="sb-back">↑${n.uphill_back.toFixed(0)}</span></div></td>`+
+      `<td class="${scColor(s.husband)}" style="font-weight:600">${n.husb_total_min}</td>`+
+      `<td>${n.wife_best_min}<br><span class="sub">${n.wife_best_station.split('（')[0]}</span></td>`+
+      `<td style="font-size:.63rem;white-space:nowrap">${extShort}</td>`+
+      `<td class="${scColor(s.A)}" style="font-weight:600">${s.A}</td>`+
+      `<td class="${scColor(s.B)}" style="font-weight:600">${s.B}</td>`+
+      `<td style="font-size:.85rem">${gardenIcon(n.garden)}</td>`+
+      `<td style="font-size:.78rem">${evalIcon(n.third_party_eval)}</td>`+
+      `<td>${vcHTML(n.vacancy_status,n.vacancy_1aged)}</td>`;
+    tr.onclick=()=>{
+      if(selRow)selRow.classList.remove('sel');
+      tr.classList.add('sel');selRow=tr;
+      showIP(n);
+    };
+    tb.appendChild(tr);
+  });
+}
+
+function filter(){
+  const q=document.getElementById('search').value.toLowerCase();
+  const list=D.filter(n=>{
+    const m=n.name.toLowerCase().includes(q)||n.address.toLowerCase().includes(q)||n.operator_type.toLowerCase().includes(q);
+    const v=!showV||(n.vacancy_status.includes('空きあり')||n.vacancy_status.includes('残りわずか'));
+    const e=!showE||n.english;
+    return m&&v&&e;
+  });
+  render(list);
+  D.forEach(n=>{if(markers[n.name])markers[n.name].setVisible(list.some(d=>d.name===n.name));});
+}
+function toggleV(){showV=!showV;document.getElementById('bv').classList.toggle('active',showV);filter();}
+function toggleE(){showE=!showE;document.getElementById('be').classList.toggle('active',showE);filter();}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3Yyy-wgB7zJzEtNsjjwxsDqHmSpSgrvQ&callback=initMap&language=ja"></script>
+</body>
+</html>
